@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f2e9" />
+  <meta name="description" content="20.10 — Một món quà nhỏ dành riêng cho Rem, từ Bon." />
+  <title>Just for You, Rem ♡</title>
+  <!-- Fonts are optional. The website works offline using fallback fonts. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --wine:#4a1f2f; --wine-deep:#2c101e; --wine-muted:#692f43;
+      --ivory:#f7f2e9; --paper:#fffaf2; --gold:#c6a276;
+      --ink:#3c2630; --muted:#967b7f; --line:rgba(96,59,62,.17);
+      --serif:'Cormorant Garamond',Georgia,serif;
+      --sans:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+      --ease:cubic-bezier(.2,.78,.2,1);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden}
+    body{background:var(--ivory);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+    button,input{font:inherit}
+    button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+    button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:5px}
+    button:disabled{opacity:.5;cursor:not-allowed}
+    ::selection{background:var(--gold);color:#24151a}
+    .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath filter='url(%23n)' opacity='.23' d='M0 0h160v160H0z'/%3E%3C/svg%3E")}
+    .shell-top{position:fixed;z-index:70;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;padding:clamp(17px,3vw,34px) clamp(20px,5vw,78px);gap:16px;pointer-events:none;transition:color .5s}
+    .brand{font-family:var(--serif);font-style:italic;font-size:24px;letter-spacing:.01em;white-space:nowrap}
+    .top-actions{display:flex;gap:14px;align-items:center;pointer-events:auto}
+    .chapter-count{font-size:10px;letter-spacing:.24em;opacity:.65;white-space:nowrap}
+    .icon-btn{width:40px;height:40px;border:1px solid currentColor;color:inherit;border-radius:50%;background:transparent;display:grid;place-items:center;opacity:.8;transition:background .25s,transform .25s}
+    .icon-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.08)}
+    .icon-btn svg{width:17px;height:17px}
+    .shell-bottom{position:fixed;z-index:70;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;padding:14px clamp(20px,5vw,78px) max(20px,env(safe-area-inset-bottom));gap:12px;pointer-events:none;transition:color .5s}
+    .footer-note{font-size:9px;letter-spacing:.2em;text-transform:uppercase;opacity:.58}
+    .back-btn{border:0;background:transparent;color:inherit;pointer-events:auto;font-size:11px;letter-spacing:.1em;display:flex;align-items:center;gap:7px;padding:8px 0;transition:opacity .2s}
+    .back-btn:hover{opacity:.65}.back-btn[hidden]{display:none}
+    .mini-progress{display:flex;gap:5px}
+    .mini-progress i{display:block;width:15px;height:2px;background:currentColor;opacity:.15;transition:opacity .5s,width .5s}
+    .mini-progress i.past{opacity:.5}.mini-progress i.now{width:28px;opacity:.95;background:var(--gold)}
+    .theme-dark .shell-top,.theme-dark .shell-bottom{color:#fff3e5}
+    .theme-light .shell-top,.theme-light .shell-bottom{color:var(--wine)}
+    #app{position:relative;height:100dvh;width:100%;isolation:isolate}
+    .screen{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.035);transition:opacity .8s var(--ease),transform 1.05s var(--ease),visibility .8s;display:flex;align-items:center;justify-content:center;padding:88px 22px 70px}
+    .screen.active{opacity:1;visibility:visible;transform:scale(1);pointer-events:auto;z-index:2}
+    .screen::before{content:"";position:absolute;inset:0;pointer-events:none}
+    .screen > *{position:relative;z-index:1}
+    .light-screen{background:var(--ivory);color:var(--wine)}
+    .light-screen::before{background:radial-gradient(ellipse at 52% 43%,#fffaf3 0%,transparent 55%),radial-gradient(ellipse at 3% 100%,#dfcebd77,transparent 50%)}
+    .dark-screen{background:var(--wine-deep);color:#f8ede1}
+    .dark-screen::before{background:radial-gradient(ellipse at 53% 34%,#783b4f99,transparent 60%),radial-gradient(ellipse at 0% 110%,#170913,transparent 55%)}
+    .fine-border{position:absolute!important;z-index:0!important;inset:21px 25px;border:1px solid currentColor;opacity:.12;pointer-events:none}
+    .eyebrow{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.29em;color:var(--gold)}
+    .serif{font-family:var(--serif);font-weight:400}
+    h1,h2,p{margin-top:0}
+    h1,h2{font-weight:400}
+    .btn-primary{border:1px solid var(--wine);color:#fff9ef;background:var(--wine);border-radius:2px;min-width:188px;padding:15px 25px;letter-spacing:.075em;font-size:12px;transition:transform .25s,background .25s,box-shadow .25s}
+    .btn-primary:hover{transform:translateY(-3px);background:#652b3f;box-shadow:0 13px 35px #2a0b1622}
+    .btn-primary:active{transform:translateY(-1px)}
+    .btn-outline{border:1px solid #b9967c;background:transparent;color:inherit;border-radius:2px;padding:14px 23px;letter-spacing:.08em;font-size:12px;transition:background .25s,transform .25s}
+    .btn-outline:hover{transform:translateY(-2px);background:#ffffff10}
+    .light-screen .btn-outline:hover{background:#d7b89817}
+    .btn-light{background:#f8eee4;color:var(--wine);border-color:#f8eee4}
+    .btn-light:hover{background:white}
+    .minor-link{font-size:12px;letter-spacing:.08em;color:inherit;background:none;border:none;padding:8px 12px;text-decoration:underline;text-decoration-color:#bd977c;text-underline-offset:5px}
+    .btn-arrow{display:inline-block;margin-left:13px;font-size:18px;vertical-align:-1px}
+    .float{animation:float 6s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes pulseSoft{50%{transform:scale(1.045)}}
+    .screen.active .stagger>*{animation:rise .75s var(--ease) both}
+    .screen.active .stagger>*:nth-child(2){animation-delay:.12s}
+    .screen.active .stagger>*:nth-child(3){animation-delay:.23s}
+    .screen.active .stagger>*:nth-child(4){animation-delay:.34s}
+    .screen.active .stagger>*:nth-child(5){animation-delay:.45s}
+    .screen.active .stagger>*:nth-child(6){animation-delay:.54s}
+    /* Opening */
+    .hero{position:relative;text-align:center;width:min(850px,100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+    .hero-crest{width:75px;height:75px;margin:4px 0 15px;opacity:.86}
+    .hero h1{font-size:clamp(77px,14vw,154px);line-height:.79;letter-spacing:-.055em;margin:20px 0 27px}
+    .hero h1 em{font-weight:400;display:block;padding:7px 0 12px}
+    .hero .occasion{font-size:11px;letter-spacing:.2em;color:#856566;text-transform:uppercase;margin-bottom:16px}
+    .hero .dedication{font-family:var(--serif);font-size:clamp(23px,3.2vw,34px);font-style:italic;margin-bottom:30px}
+    .hero .soft-line{width:64px;height:1px;background:var(--gold);margin:0 auto 17px}
+    .hero .eyebrow{color:#a47b67}
+    .hero-side{position:absolute!important;left:clamp(22px,6vw,95px);top:50%;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);font-size:9px;letter-spacing:.32em;color:#b99b8e;z-index:1}
+    .hero-side.right{left:auto;right:clamp(22px,6vw,95px);transform:translateY(-50%)}
+    /* Quiz */
+    .quiz-layout{width:min(630px,100%);display:flex;flex-direction:column;align-items:center;text-align:center}
+    .quiz-title{font-family:var(--serif);font-size:clamp(48px,7.4vw,83px);line-height:.98;margin:18px 0 9px;letter-spacing:-.025em}
+    .quiz-title i{display:block;color:#d9b79c;font-weight:400}
+    .quiz-sub{font-size:12px;line-height:1.8;letter-spacing:.018em;opacity:.77;margin:8px 0 23px}
+    .questions{width:min(530px,100%);border-top:1px solid #e8cdb443;border-bottom:1px solid #e8cdb443;margin-bottom:25px;text-align:left}
+    .question{display:flex;align-items:baseline;gap:18px;padding:12px 4px;border-bottom:1px solid #e8cdb425}
+    .question:last-child{border-bottom:0}
+    .question span{font-family:var(--serif);font-size:22px;color:#dcb99b;font-style:italic;min-width:17px}
+    .question p{font-family:var(--serif);font-size:clamp(21px,2.8vw,28px);margin:0}
+    .input-wrap{position:relative;width:min(385px,100%);margin:0 auto 11px}
+    .answer-input{width:100%;background:#ffffff0d;color:#fff9f0;border:1px solid #c7a1788c;padding:17px 42px 17px 20px;outline:none;text-align:center;letter-spacing:.06em;border-radius:2px;font-size:15px;transition:border-color .2s,box-shadow .2s}
+    .answer-input::placeholder{color:#dbc3c49c;font-size:12px;letter-spacing:.05em}
+    .answer-input:focus{border-color:#f5d1a5;box-shadow:0 0 0 3px #fff2dd0d}
+    .answer-input.shake{animation:shake .42s ease}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+    .cat-mark{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#d4b09a;font-size:19px}
+    .feedback{min-height:23px;font-size:12px;color:#f4caad;margin-bottom:11px;text-align:center;transition:opacity .2s}
+    .feedback.good{color:#f5e8c8}
+    .quiz-sparkle{position:absolute;top:-20px;right:-25px;font-size:26px;opacity:0;pointer-events:none}
+    .quiz-sparkle.show{animation:rise .8s both}
+    /* Invitation */
+    .invite-wrap{width:min(780px,100%);text-align:center;display:flex;align-items:center;flex-direction:column;justify-content:center;gap:17px}
+    .invite-wrap h2,.date-wrap h2{font-family:var(--serif);font-size:clamp(50px,8vw,94px);line-height:.89;letter-spacing:-.025em;margin:12px 0 0}
+    .invite-wrap h2 em,.date-wrap h2 em{color:#ad8473;font-weight:400}
+    .envelope-zone{position:relative;width:min(430px,79vw);height:min(255px,31vh);min-height:185px;margin:10px 0 15px;perspective:900px;cursor:pointer;filter:drop-shadow(0px 24px 21px #4c242029)}
+    .envelope{position:absolute;inset:28px 0 0;overflow:visible}
+    .envelope-back{position:absolute;inset:0;background:#e7d6c3;border:1px solid #cdb39d}
+    .envelope-letter{position:absolute;top:13%;left:12%;width:76%;height:82%;background:#fffdf7;border:1px solid #e0c6af;box-shadow:0 5px 22px #4a221725;display:grid;place-items:center;z-index:2;transition:transform 1.05s var(--ease)}
+    .envelope-letter-inner{display:flex;flex-direction:column;align-items:center;gap:10px;color:#b28b76;font-family:var(--serif);font-size:27px;font-style:italic}
+    .envelope-letter-inner::after{content:"";display:block;width:70px;height:1px;background:#cdb399}
+    .envelope-front{position:absolute;inset:0;z-index:4;clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%);background:linear-gradient(155deg,#f3e4d1,#d9c2ae);border:1px solid #cbb49c}
+    .envelope-flap{position:absolute;inset:0;z-index:5;clip-path:polygon(0 0,100% 0,50% 59%);background:linear-gradient(#f5e9db,#e5d0b9);transform-origin:top center;transition:transform .85s var(--ease),z-index .2s .4s;backface-visibility:hidden}
+    .wax-seal{position:absolute;z-index:6;left:50%;top:49%;transform:translate(-50%,-50%);width:59px;height:59px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#844356,#4a1b2d 65%);border:2px solid #7f4554;color:#f1d4b8;box-shadow:0 4px 12px #54283455;font-family:var(--serif);font-style:italic;font-size:27px;transition:opacity .3s}
+    .envelope-zone.open .envelope-flap{transform:rotateX(180deg);z-index:1}
+    .envelope-zone.open .envelope-letter{transform:translateY(-82px)}
+    .envelope-zone.open .wax-seal{opacity:0}
+    .invitation-open .envelope-zone{height:0!important;min-height:0!important;margin:0!important;opacity:0;pointer-events:none;transition:height .7s var(--ease),min-height .7s var(--ease),opacity .45s,margin .7s}
+    .invitation-open .invite-wrap{gap:16px}
+    .invite-reveal{max-width:510px;opacity:0;transform:translateY(18px);max-height:0;overflow:hidden;transition:opacity .8s .35s,transform .8s .35s,max-height .65s}
+    .invite-reveal.visible{opacity:1;transform:translateY(0);max-height:340px}
+    .invite-reveal h3{font-family:var(--serif);font-size:clamp(27px,4vw,38px);font-weight:500;margin:0 0 7px}
+    .invite-reveal p{font-family:var(--serif);font-size:clamp(20px,2.5vw,24px);line-height:1.4;color:#815e65;margin-bottom:16px}
+    .invite-hint{font-size:11px;letter-spacing:.1em;color:#9f7b72}
+    /* Date quiz */
+    .date-wrap{width:min(610px,100%);text-align:center;display:flex;align-items:center;flex-direction:column}
+    .date-symbol{font-family:var(--serif);font-size:clamp(48px,7vw,85px);color:#c6a276;font-style:italic;border:1px solid #c7a47888;border-radius:50%;width:92px;height:92px;display:grid;place-items:center;line-height:1;margin-bottom:10px}
+    .date-qa{font-size:clamp(19px,2.8vw,28px);font-family:var(--serif);margin:20px 0 4px}
+    .date-pop{color:#977076;font-family:var(--serif);font-style:italic;font-size:20px;margin:0 0 28px}
+    .date-input{color:var(--wine);background:#fffdfa;border-color:#bfa797;max-width:360px}
+    .date-input::placeholder{color:#a88f8a}
+    .date-wrap .feedback{color:#934b5d;min-height:26px}
+    .date-wrap .feedback.good{color:#8b634f}
+    /* Recap */
+    .recap-screen{background:#29151e;color:#fff4e9;padding:0}
+    /* Recap: show every photo in full; gently blur the same image behind empty margins. */
+    .recap-photo{position:absolute!important;inset:0;z-index:0!important;overflow:hidden;background:linear-gradient(125deg,#2a1520,#694653 45%,#ae877b);transform:none;transition:background 1s}
+    .recap-photo::before{content:"";position:absolute;inset:-28px;z-index:0;background-image:var(--recap-bg,none);background-position:center;background-size:cover;filter:blur(28px) brightness(.67) saturate(.85);opacity:.88;pointer-events:none}
+    .recap-photo img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:contain;object-position:center;opacity:0;transition:opacity .9s}
+    .recap-photo img.ready{opacity:1}
+    .recap-photo::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(31,15,24,.11),transparent 25%,transparent 57%,rgba(31,15,24,.18) 73%,rgba(31,15,24,.57) 100%);pointer-events:none}
+    .recap-photo .photo-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:clamp(78px,19vw,260px);color:#f2d8c124;white-space:nowrap;z-index:1}
+    .recap-content{width:min(1250px,100%);padding:0 clamp(26px,6vw,85px) clamp(73px,10vh,110px);display:flex;flex-direction:column;align-items:flex-start;margin-top:auto}
+    .recap-content h2{font-family:var(--serif);font-size:clamp(54px,7.5vw,104px);line-height:.87;letter-spacing:-.04em;margin:10px 0 17px;max-width:650px;text-shadow:0 2px 12px rgba(22,8,15,.6),0 4px 30px rgba(22,8,15,.35)}
+    .recap-content h2 em{display:block;font-weight:400;color:#f2d4bb}
+    .recap-description{font-size:clamp(13px,1.5vw,15px);line-height:1.65;max-width:510px;color:#fff8f0;margin:0 0 18px;text-shadow:0 2px 10px rgba(22,8,15,.8)}
+    .recap-index{font-family:var(--serif);font-size:18px;color:#f8ddc2;text-shadow:0 2px 10px rgba(22,8,15,.75)}
+    .recap-bottom{display:flex;align-items:center;justify-content:space-between;gap:15px;width:100%;max-width:600px}
+    .recap-controls{display:flex;gap:11px;align-items:center}
+    .recap-controls button{width:45px;height:45px;display:grid;place-items:center;border:1px solid #fff8ec75;background:#fff1e912;color:#fff6ec;border-radius:50%;font-size:22px;transition:background .2s}
+    .recap-controls button:hover{background:#fff1e933}
+    .recap-indicators{position:absolute!important;top:103px;left:50%;transform:translateX(-50%);display:flex;gap:7px;width:min(360px,70vw);z-index:10!important}
+    .recap-indicators span{flex:1;height:2px;background:#fff9ed55;transition:background .4s}
+    .recap-indicators span.current{background:#fff6df}
+    /* Letter */
+    .letter-layout{display:flex;align-items:center;justify-content:center;gap:clamp(20px,5vw,100px);width:min(1130px,100%)}
+    .letter-aside{width:32%;flex-shrink:0}
+    .letter-aside h2{font-family:var(--serif);font-size:clamp(67px,8vw,120px);line-height:.81;letter-spacing:-.05em;margin:18px 0 22px}
+    .letter-aside h2 em{display:block;color:#a67c79}
+    .letter-aside p{font-family:var(--serif);font-style:italic;font-size:clamp(19px,2.2vw,26px);color:#95777c}
+    .paper{position:relative;width:min(555px,60vw);height:min(600px,70vh);background:linear-gradient(142deg,#fffdf8,#f5eade);padding:clamp(25px,4vw,58px);box-shadow:0 34px 65px #56382727,0 2px 5px #58372f17;border:1px solid #decbbb;display:flex;flex-direction:column;justify-content:center}
+    .paper::before{content:"";position:absolute;inset:15px;border:1px solid #bf9d8080;pointer-events:none}
+    .paper-mark{position:absolute;top:24px;right:33px;font-family:var(--serif);font-style:italic;font-size:26px;color:#bd9979}
+    .letter-head{font-family:var(--serif);font-style:italic;font-size:clamp(26px,3.3vw,38px);margin:8px 0 14px}
+    .letter-text{font-family:var(--serif);font-size:clamp(19px,2.1vw,25px);line-height:1.5;color:#654953;white-space:pre-line;min-height:112px}
+    .letter-sign{font-family:var(--serif);font-style:italic;font-size:28px;color:#8c4d5c;margin:12px 0 0;text-align:right}
+    .letter-bottom{display:flex;justify-content:space-between;align-items:center;gap:13px;margin-top:12px}
+    .letter-page-count{font-size:10px;letter-spacing:.15em;color:#967577}
+    .letter-buttons{display:flex;align-items:center;gap:7px}
+    .letter-buttons .minor-link{text-decoration:none;font-size:18px;padding:5px 10px}
+    .letter-next{margin-top:6px;align-self:flex-end}
+    /* Video */
+    .video-layout{display:flex;flex-direction:column;align-items:center;gap:15px;width:min(890px,100%);text-align:center}
+    .video-layout h2{font-size:clamp(54px,7.7vw,95px);font-family:var(--serif);font-style:italic;margin:0;line-height:1}
+    .video-shell{width:min(780px,100%);aspect-ratio:16 / 9;max-height:51vh;background:radial-gradient(ellipse at 50% 38%,#583346,#1c0c17 67%);border:1px solid #ba8f745b;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 20px 65px #0005}
+    .video-shell::before{content:"";position:absolute;inset:12px;border:1px solid #c9ad8a29;pointer-events:none;z-index:2}
+    .video-shell #messageVideo{position:absolute;inset:0;width:100%;height:100%;border:0;background:#120d10;opacity:0;pointer-events:none;transition:opacity .2s}
+    .video-shell #messageVideo.is-ready{opacity:1;pointer-events:auto}
+    .video-cover{z-index:3;display:flex;flex-direction:column;align-items:center;gap:14px;padding:25px}
+    .video-cover.hidden{display:none}
+    .play-circle{width:74px;height:74px;border-radius:50%;border:1px solid #f6d8c5b8;background:#ffffff10;color:#fff6e8;font-size:25px;display:grid;place-items:center;padding-left:4px;transition:transform .3s,background .3s}
+    .play-circle:hover{transform:scale(1.1);background:#ffffff22}
+    .video-caption{font-family:var(--serif);font-style:italic;font-size:23px;color:#efcdb8}
+    .video-help{font-size:12px;color:#dbc2baaa;line-height:1.5}
+    /* Finale */
+    .finale-layout{display:flex;flex-direction:column;align-items:center;text-align:center;width:min(820px,100%)}
+    .finale-rose{width:clamp(185px,32vw,325px);height:clamp(185px,32vw,325px);filter:drop-shadow(0 0 35px #cf647b39);overflow:visible}
+    .stem{stroke:#9b7f69;stroke-width:2;stroke-linecap:round;stroke-dasharray:280;stroke-dashoffset:280}
+    .leaf{fill:#837662;opacity:0}
+    .petal{transform-box:fill-box;transform-origin:50% 94%;transform:scale(.02);opacity:0}
+    .rose-center{transform-box:fill-box;transform-origin:50% 50%;transform:scale(0);opacity:0}
+    .finale-screen.blooming .stem{animation:draw 2.2s .2s ease forwards}
+    .finale-screen.blooming .leaf{animation:fadeIn 1s 1.1s forwards}
+    .finale-screen.blooming .petal{animation:openPetal 2.7s var(--ease) forwards}
+    .finale-screen.blooming .rose-center{animation:openPetal 1.5s 2.1s var(--ease) forwards}
+    @keyframes draw{to{stroke-dashoffset:0}}
+    @keyframes openPetal{0%{transform:scale(.08) rotate(-12deg);opacity:0}32%{opacity:1}73%{transform:scale(1.09) rotate(3deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+    .finale-title{font-family:var(--serif);font-size:clamp(70px,12vw,146px);font-style:italic;line-height:.85;letter-spacing:-.045em;margin:0 0 18px;opacity:0;transform:translateY(14px)}
+    .finale-sub{font-family:var(--serif);font-size:clamp(20px,2.5vw,29px);font-style:italic;color:#e7baa4;opacity:0}
+    .finale-actions{display:flex;gap:13px;justify-content:center;align-items:center;flex-wrap:wrap;opacity:0;margin-top:17px}
+    .finale-screen.blooming .finale-title{animation:rise 1.4s 3s both}
+    .finale-screen.blooming .finale-sub{animation:rise 1.3s 4s both}
+    .finale-screen.blooming .finale-actions{animation:fadeIn 1.3s 4.8s both}
+    .floating-petal{position:absolute!important;z-index:0!important;width:15px;height:23px;background:#9a5360;border-radius:82% 20% 74% 28%;opacity:0;pointer-events:none}
+    .finale-screen.blooming .floating-petal{animation:petalFall 8s linear infinite}
+    @keyframes petalFall{0%{transform:translate3d(0,-10vh,0) rotate(0);opacity:0}12%{opacity:.65}85%{opacity:.45}100%{transform:translate3d(75px,100vh,0) rotate(270deg);opacity:0}}
+    /* Toast and audio info */
+    .toast{position:fixed;z-index:100;left:50%;bottom:80px;transform:translate(-50%,20px);background:#fffaf1;color:var(--wine);border:1px solid #c8a78266;box-shadow:0 12px 35px #2010182c;border-radius:3px;padding:12px 19px;max-width:min(90vw,470px);font-size:12px;line-height:1.5;text-align:center;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+    .toast.visible{opacity:1;transform:translate(-50%,0)}
+    .hidden{display:none!important}
+    @media(min-width:900px){.screen#screen-1{padding-top:95px}}
+    @media(max-width:720px){
+      .footer-note{display:none}
+      .shell-top{padding-top:max(18px,env(safe-area-inset-top));padding-left:22px;padding-right:22px}
+      .shell-bottom{padding:12px 22px max(16px,env(safe-area-inset-bottom))}
+      .brand{font-size:20px}.icon-btn{width:36px;height:36px}.chapter-count{font-size:9px}
+      .screen{padding:78px 22px 65px}.fine-border{inset:12px 13px}
+      .hero-side{display:none}.hero-crest{height:66px;width:66px;margin-bottom:8px}
+      .hero h1{font-size:clamp(78px,16vw,126px);margin:14px 0 25px}
+      .hero .occasion{font-size:10px}.hero .dedication{font-size:26px}
+      .quiz-title{font-size:clamp(46px,10vw,71px);margin-top:11px}.quiz-sub{font-size:11px;margin-bottom:18px}
+      .question{padding:10px 0}.question p{font-size:clamp(21px,5.7vw,28px)}
+      .questions{margin-bottom:19px}.feedback{margin-bottom:7px}
+      .envelope-zone{margin:5px 0 3px;height:clamp(182px,24vh,245px)}
+      .envelope-zone.open .envelope-letter{transform:translateY(-50px)}
+      .invite-wrap{gap:12px}.invite-wrap h2,.date-wrap h2{font-size:clamp(54px,12vw,84px)}
+      .date-symbol{width:73px;height:73px;font-size:58px}.date-qa{font-size:23px;margin-top:23px}.date-pop{font-size:18px}
+      .recap-content{padding:0 27px max(71px,11vh)}.recap-content h2{font-size:clamp(48px,10vw,70px)}.recap-description{max-width:95%}
+      .letter-layout{flex-direction:column;gap:12px}.letter-aside{width:auto;text-align:center}.letter-aside h2{font-size:clamp(51px,9vw,75px);margin:7px 0 4px}.letter-aside h2 em{display:inline}.letter-aside p{font-size:17px;margin-bottom:0}
+      .paper{width:min(530px,100%);height:min(470px,58vh);padding:26px 33px}.paper::before{inset:11px}.paper-mark{right:22px;top:17px;font-size:21px}.letter-head{font-size:26px;margin-bottom:9px}.letter-text{font-size:clamp(18px,4.4vw,22px);line-height:1.43}.letter-sign{font-size:23px}
+      .video-layout h2{font-size:clamp(56px,10vw,80px)}.video-shell{aspect-ratio:4 / 3;max-height:43vh}.video-help{max-width:280px}
+      .finale-rose{width:clamp(245px,70vw,340px);height:clamp(245px,70vw,340px)}
+    }
+    @media(max-height:720px){
+      .screen{padding-top:60px;padding-bottom:50px}
+      .hero-crest{width:50px;height:50px;margin:0}
+      .hero h1{font-size:clamp(70px,13vh,114px);margin:7px 0 12px}
+      .hero .dedication{margin-bottom:13px}.hero .occasion{margin-bottom:5px}
+      .quiz-title{font-size:clamp(40px,7.3vh,60px);margin:6px 0}
+      .quiz-sub{margin:3px 0 9px}.question{padding:6px 0}.questions{margin-bottom:11px}
+      .question p{font-size:clamp(19px,3.5vh,25px)}
+      .answer-input{padding:12px 35px 12px 13px}.btn-primary{padding:12px 19px}.feedback{min-height:19px;font-size:11px;margin-bottom:5px}
+      .invite-wrap{gap:6px}.invite-wrap h2,.date-wrap h2{font-size:clamp(44px,9vh,74px);margin:2px 0}
+      .envelope-zone{height:160px;min-height:160px;margin:0}.envelope{inset:10px 0 0}.envelope-zone.open .envelope-letter{transform:translateY(-44px)}
+      .invite-reveal h3{font-size:25px}.invite-reveal p{font-size:19px;margin-bottom:8px}
+      .date-symbol{width:55px;height:55px;font-size:43px;margin:0}.date-qa{margin:10px 0 2px}.date-pop{margin:0 0 15px}
+      .letter-layout{gap:7px}.letter-aside h2{font-size:50px}.letter-aside p{font-size:16px}.paper{height:min(400px,61vh)}
+      .letter-text{font-size:clamp(17px,3.2vh,22px)}
+      .finale-rose{height:clamp(155px,32vh,240px);width:clamp(155px,32vh,240px)}
+      .finale-title{font-size:clamp(60px,12vh,95px)}.finale-sub{font-size:19px}
+    }
+    @media(max-width:360px){.screen{padding-left:16px;padding-right:16px}.letter-text{font-size:17px}.hero h1{font-size:74px}.quiz-title{font-size:43px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;transition-duration:.001ms!important}.finale-title,.finale-sub,.finale-actions{opacity:1}}
+  </style>
+</head>
+<body class="theme-light">
+  <div class="grain" aria-hidden="true"></div>
+  <header class="shell-top">
+    <div class="brand">for Rem ♡</div>
+    <div class="top-actions">
+      <span class="chapter-count" id="chapterCount">01 / 08</span>
+      <button class="icon-btn" id="soundToggle" aria-label="Tắt âm thanh" title="Bật / tắt âm thanh">
+        <svg id="soundIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      </button>
+    </div>
+  </header>
+  <main id="app">
+    <!-- 01 INTRO -->
+    <section class="screen light-screen active" id="screen-1" aria-label="Màn mở đầu">
+      <div class="fine-border"></div>
+      <div class="hero-side">A LOVE LETTER · OCTOBER 2026</div>
+      <div class="hero-side right">ONLY FOR MY FAVORITE PERSON</div>
+      <div class="hero stagger">
+        <svg class="hero-crest float" viewBox="0 0 90 90" fill="none" aria-hidden="true">
+          <path d="M45 71V37M45 52c-15 1-19-12-17-19 10 1 16 6 17 19ZM45 44c13-1 21-10 19-19-11 2-18 8-19 19Z" stroke="#a27a69" stroke-width="1.3"/>
+          <path d="M45 37c-8-4-13-10-8-18 4-5 8-4 10-1 6-7 17-2 14 7-2 6-8 9-16 12Z" stroke="#773848" stroke-width="1.4" fill="#a9657620"/>
+          <path d="M19 74c18 9 34 10 53-1" stroke="#c6a276" stroke-width="1.1"/>
+        </svg>
+        <span class="eyebrow">20 / 10 · VIETNAMESE WOMEN'S DAY</span>
+        <h1 class="serif">Just for <em>You.</em></h1>
+        <div class="soft-line"></div>
+        <div class="occasion">20.10 · Ngày Phụ nữ Việt Nam</div>
+        <p class="dedication">Dành riêng cho tình yêu của đời anh.</p>
+        <button class="btn-primary" id="startBtn">Mở món quà này <span class="btn-arrow">↗</span></button>
+      </div>
+    </section>
+    <!-- 02 QUIZ 1 -->
+    <section class="screen dark-screen" id="screen-2" aria-label="Quiz một">
+      <div class="fine-border"></div>
+      <div class="quiz-layout stagger">
+        <span class="eyebrow">Chapter I · Our little secret</span>
+        <h2 class="quiz-title">Three questions.<i>One answer.</i></h2>
+        <p class="quiz-sub">Một ghi chú nho nhỏ: cả ba câu đều có <b>cùng một đáp án</b>, gồm <b>3 chữ cái</b>. ♡</p>
+        <div class="questions">
+          <div class="question"><span>01.</span><p>Bạn trai của em là ai?</p></div>
+          <div class="question"><span>02.</span><p>Chồng tương lai của Khánh Chi là ai?</p></div>
+          <div class="question"><span>03.</span><p>Bố các con của Rem  là ai?</p></div>
+        </div>
+        <form id="quiz1Form" style="width:100%;display:flex;align-items:center;flex-direction:column" autocomplete="off">
+          <div class="input-wrap">
+            <input id="quiz1Input" class="answer-input" type="text" placeholder="Nhập câu trả lời của em..." aria-label="Câu trả lời của quiz một" autocapitalize="off" spellcheck="false" maxlength="40" required />
+            <span class="cat-mark" aria-hidden="true">♡</span><span id="quiz1Sparkle" class="quiz-sparkle">✧</span>
+          </div>
+          <div class="feedback" id="quiz1Feedback" role="status" aria-live="polite"></div>
+          <button class="btn-primary btn-light" id="quiz1Submit" type="submit">Unlock the secret <span class="btn-arrow">↗</span></button>
+        </form>
+      </div>
+    </section>
+    <!-- 03 INVITATION -->
+    <section class="screen light-screen" id="screen-3" aria-label="Lời mời bí mật">
+      <div class="fine-border"></div>
+      <div class="invite-wrap">
+        <span class="eyebrow">Chapter II · A secret invitation</span>
+        <h2>Your <em>Invitation.</em></h2>
+        <p class="invite-hint" id="inviteHint">Chạm vào phong thư để mở một điều bí mật ♡</p>
+        <div class="envelope-zone" id="envelopeZone" role="button" tabindex="0" aria-label="Mở phong thư">
+          <div class="envelope">
+            <div class="envelope-back"></div>
+            <div class="envelope-letter"><div class="envelope-letter-inner">To my love <span>♡</span></div></div>
+            <div class="envelope-front"></div><div class="envelope-flap"></div><div class="wax-seal">B</div>
+          </div>
+        </div>
+        <div class="invite-reveal" id="inviteReveal">
+          <h3 id="inviteTitle"></h3>
+          <p id="inviteBody"></p>
+          <button class="btn-primary" id="invitationNext">Còn một câu nữa thôi <span class="btn-arrow">↗</span></button>
+        </div>
+      </div>
+    </section>
+    <!-- 04 QUIZ 2 -->
+    <section class="screen light-screen" id="screen-4" aria-label="Quiz ngày gặp nhau">
+      <div class="fine-border"></div>
+      <div class="date-wrap stagger">
+        <span class="eyebrow">Chapter III · The day we met</span>
+        <div class="date-symbol">✧</div>
+        <h2>The Day <em>We Met.</em></h2>
+        <p class="date-qa">Lần đầu chúng mình nói chuyện với nhau là lúc nào?</p>
+        <p class="date-pop">~ the day i met your father?</p>
+        <form id="quiz2Form" style="width:100%;display:flex;align-items:center;flex-direction:column" autocomplete="off">
+          <div class="input-wrap"><input id="quiz2Input" class="answer-input date-input" inputmode="numeric" type="text" placeholder="dd/m/yyyy" aria-label="Nhập ngày tháng năm" spellcheck="false" maxlength="12" required /></div>
+          <div class="feedback" id="quiz2Feedback" role="status" aria-live="polite"></div>
+          <button class="btn-primary" type="submit" id="quiz2Submit">Remember this day <span class="btn-arrow">↗</span></button>
+        </form>
+      </div>
+    </section>
+    <!-- 05 RECAP -->
+    <section class="screen recap-screen" id="screen-5" aria-label="Kỷ niệm ngày 20 tháng 10">
+      <div class="recap-photo" id="recapPhoto"><div class="photo-placeholder" id="photoPlaceholder">20 · 10</div><img id="recapImg" alt="Kỷ niệm của chúng mình" /></div>
+      <div class="recap-indicators" id="recapIndicators"></div>
+      <div class="recap-content">
+        <span class="eyebrow">Chapter IV · Our beautiful memories</span>
+        <div class="recap-index" id="recapIndex">01 — 06</div>
+        <h2 id="recapTitle">Our little<br/><em>October.</em></h2>
+        <p class="recap-description" id="recapDescription"></p>
+        <div class="recap-bottom">
+          <div class="recap-controls">
+            <button id="recapPrev" aria-label="Ảnh trước">←</button>
+            <button id="recapNext" aria-label="Ảnh tiếp theo">→</button>
+          </div>
+          <button id="recapFinish" class="btn-outline hidden">Món quà tiếp theo <span class="btn-arrow">↗</span></button>
+        </div>
+      </div>
+    </section>
+    <!-- 06 LETTER -->
+    <section class="screen light-screen" id="screen-6" aria-label="Bức thư gửi vợ">
+      <div class="fine-border"></div>
+      <div class="letter-layout">
+        <div class="letter-aside"><span class="eyebrow">Chapter V · From my heart</span><h2>A Little <em>Letter.</em></h2><p>Những điều anh muốn nói với em...</p></div>
+        <article class="paper">
+          <div class="paper-mark">P ♡ C</div>
+          <h3 class="letter-head" id="letterHead">Rem yêu của anh,</h3>
+          <div class="letter-text" id="letterText"></div>
+          <div class="letter-sign" id="letterSign">— Bon ♡</div>
+          <div class="letter-bottom"><span class="letter-page-count" id="letterPageCount">01 / 03</span><div class="letter-buttons"><button class="minor-link" id="letterPrev" aria-label="Trang thư trước">←</button><button class="minor-link" id="letterNext" aria-label="Trang thư tiếp">→</button></div></div>
+          <button id="letterFinish" class="minor-link letter-next hidden">Anh còn điều này muốn nói ↗</button>
+        </article>
+      </div>
+    </section>
+    <!-- 07 VIDEO -->
+    <section class="screen dark-screen" id="screen-7" aria-label="Video lời chúc">
+      <div class="fine-border"></div>
+      <div class="video-layout stagger">
+        <span class="eyebrow">Chapter VI · Just one more thing</span>
+        <h2>A Message from Me.</h2>
+        <p style="font-family:var(--serif);font-size:22px;font-style:italic;color:#d8b6ab;margin:0">Có những lời anh muốn tự mình nói với em.</p>
+        <div class="video-shell">
+          <div id="messageVideo" aria-label="Video lời chúc của Bon"></div>
+          <div class="video-cover" id="videoCover"><button class="play-circle" id="videoPlay" aria-label="Phát video">▶</button><div class="video-caption">Press play, my love ♡</div><div class="video-help" id="videoHelp">Một lời chúc nhỏ, chỉ dành riêng cho em.</div></div>
+        </div>
+        <button class="minor-link hidden" id="previewFinale">Xem đoạn kết <span aria-hidden="true">↗</span></button>
+      </div>
+    </section>
+    <!-- 08 FINALE -->
+    <section class="screen dark-screen finale-screen" id="screen-8" aria-label="Đóa hoa và lời yêu">
+      <div class="fine-border"></div>
+      <div class="floating-petal" style="left:11%;top:3%;animation-delay:.3s"></div>
+      <div class="floating-petal" style="left:26%;top:-8%;animation-delay:2.8s"></div>
+      <div class="floating-petal" style="left:68%;top:-16%;animation-delay:4.1s"></div>
+      <div class="floating-petal" style="left:85%;top:-10%;animation-delay:1.9s"></div>
+      <div class="floating-petal" style="left:53%;top:-20%;animation-delay:5.7s"></div>
+      <div class="finale-layout">
+        <span class="eyebrow">The End · Or perhaps, our beginning</span>
+        <svg id="roseSvg" class="finale-rose" viewBox="95 75 310 350" aria-label="Hoa hồng nở rộ" role="img" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="petalOuter" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#d28c93"/><stop offset=".43" stop-color="#963c54"/><stop offset="1" stop-color="#531b33"/></linearGradient>
+          <linearGradient id="petalInner" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f1b5af"/><stop offset=".5" stop-color="#b55970"/><stop offset="1" stop-color="#64243e"/></linearGradient></defs>
+          <path class="stem" d="M249 263C255 322 246 385 232 480" fill="none"/>
+          <path class="leaf" d="M250 375C207 339 179 355 171 375c21 10 49 19 79 0Z"/>
+          <path class="leaf" d="M246 420c29-45 63-42 77-21-26 17-51 27-77 21Z"/>
+          <g id="rosePetals"></g>
+          <g class="rose-center"><path d="M248 232c-32-7-30-38-7-47 26-9 46 17 30 38-8 11-23 15-27 2-2-8 7-15 14-13" fill="none" stroke="#efc7b2" stroke-width="8" stroke-linecap="round"/></g>
+        </svg>
+        <h2 class="finale-title">Anh yêu em.</h2>
+        <p class="finale-sub">Today, tomorrow, and every day after. ♡</p>
+        <div class="finale-actions"><button class="minor-link" id="replayBtn">Xem lại từ đầu ↺</button></div>
+      </div>
+    </section>
+  </main>
+  <footer class="shell-bottom">
+    <button class="back-btn" id="backBtn" hidden><span aria-hidden="true">←</span> Quay lại</button>
+    <span class="footer-note" id="footerNote">Made with love, by Bon</span>
+    <div class="mini-progress" id="miniProgress" aria-hidden="true"></div>
+  </footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <audio id="musicPlayer" preload="none" loop></audio>
+  <audio id="catCorrect" preload="auto" src="assets/audio/cat-correct.wav"></audio>
+  <audio id="catWrong" preload="auto" src="assets/audio/cat-wrong.wav"></audio>
+  <script>
+    'use strict';
+    // ========================================================================
+    // ✎ KHU VỰC TÙY CHỈNH — Chỉnh nội dung tại đây, không cần sửa CSS/HTML.
+    // ========================================================================
+    const CONFIG = {
+      quiz1: {
+        answer: 'Bon', // Không phân biệt chữ hoa/chữ thường; ô nhập không tiết lộ đáp án.
+        wrongMessages: [
+          'Meow~ hình như chưa đúng rồi 😼',
+          'Mèo nhỏ lắc đầu... thử lại nà ♡',
+          'Một cái tên 3 chữ cái thôi mà, hihi.',
+          'Meo meo! Em nhớ kỹ lại xem ♡'
+        ],
+        correctMessage: 'Purr~ Chính xác! Có người đang cười rất tươi đây. ♡'
+      },
+      quiz2: {
+        answer: '14/1/2026', // "14/01/2026" cũng được chấp nhận.
+        wrongMessages: [
+          'Meow~ hình như mình nhớ lệch một chút rồi?',
+          'Mèo bảo em thử nhớ lại ngày đặc biệt ấy ♡',
+          'Gợi ý: Một ngày rất đẹp của tháng Một đó.'
+        ],
+        correctMessage: 'Chính ngày ấy! Và từ đó mọi điều trở nên đặc biệt hơn. ♡'
+      },
+      invitation: {
+        title: 'Một lời mời gửi riêng tới vợ yêu dấu',
+        body: 'Anh muốn mời em bước vào một cuốn phim nhỏ, nơi có những kỷ niệm của hai đứa, những lời chưa nói và một bất ngờ cuối cùng. Em đi cùng anh nhé?'
+      },
+      recap: {
+        // Thay đường dẫn, tiêu đề, chú thích cho từng ảnh. Ảnh chưa có thì hiện nền nghệ thuật.
+        slides: [
+          { image: 'assets/photos/photo-01.jpg', title: 'Our little', italic: 'October.', description: '20.10.2026 — Một ngày thật đặc biệt, vì người đi cùng anh là em.', placeholder: '20 · 10' },
+          { image: 'assets/photos/photo-02.jpg', title: 'It started', italic: 'with us.', description: 'Đôi khi hạnh phúc chỉ là cùng em bắt đầu một ngày bình thường.', placeholder: 'US' },
+          { image: 'assets/photos/photo-03.jpg', title: 'The tiny', italic: 'moments.', description: 'Những khoảnh khắc bé xíu mà anh lại muốn cất giữ mãi.', placeholder: '♡' },
+          { image: 'assets/photos/photo-04.jpg', title: 'Your lovely', italic: 'smile.', description: 'Trong tất cả những điều đẹp nhất, anh thích nụ cười của em hơn cả.', placeholder: 'REM' },
+          { image: 'assets/photos/photo-05.jpg', title: 'Always my', italic: 'favorite.', description: 'Cảm ơn em đã làm cho những ngày bên nhau trở nên thật dịu dàng.', placeholder: 'B + R' },
+          { image: 'assets/photos/photo-06.jpg', title: 'To many', italic: 'more days.', description: 'Và anh mong chúng mình còn thật nhiều ngày 20/10 như thế nữa.', placeholder: 'FOREVER' }
+        ]
+      },
+      letter: {
+        greeting: 'Rem yêu của anh,',
+        signature: '— Bon ♡',
+        // Mỗi chuỗi trong "pages" là một trang của bức thư.
+        // Tối ưu: mỗi trang 2–4 câu, tránh quá dài trên điện thoại.
+        pages: [
+          '20/10 năm nay, anh có điều muốn nói với em. Cảm ơn em vì đã xuất hiện trong cuộc đời anh, và vì đã khiến những ngày bình thường trở nên đáng yêu hơn rất nhiều.',
+          'Anh thích những lần chúng mình cười cùng nhau, những câu chuyện thường ngày trong cuộc sống mà mình thường kể nhau nghe, và cả những khoảnh khắc chỉ cần ở cạnh em thôi cũng thấy thật bình yên.',
+          'Anh mong rằng sau này, dù có bao nhiêu ngày đặc biệt đi nữa, anh vẫn sẽ luôn được nắm tay em và nói: chúc em 20/10 luôn luôn xinh đẹp, vui vẻ và bình an, tình yêu của anh. Anh thương em nhiều lắm.'
+        ]
+      },
+      audio: {
+        // Bạn tự cung cấp file nhạc hợp pháp, đúng tên tại assets/audio/.
+        quiz: 'assets/audio/quiz-playful.mp3', // Nhạc vui nhộn cho hai quiz và lời mời bí mật.
+        recap: 'assets/audio/until-you-shayne-ward.mp3', // Until You — Shayne Ward
+        letter: 'assets/audio/letter.mp3',                // Tùy chọn: để '' nếu không muốn nhạc lúc đọc thư
+        finale: 'assets/audio/i-do-911.mp3' // Until You — Shayne Ward
+      },
+      video: 'uL-vIelJh9M' // YouTube Unlisted: https://youtu.be/uL-vIelJh9M
+    };
+    // ========================================================================
+    // LOGIC WEBSITE — Phần dưới thường không cần chỉnh.
+    // ========================================================================
+    const $ = (sel) => document.querySelector(sel);
+    const screens = Array.from(document.querySelectorAll('.screen'));
+    const music = $('#musicPlayer');
+    let current = 1, furthest = 1, quiz1Wrong = 0, quiz2Wrong = 0;
+    let quiz1Passed = false, quiz2Passed = false, openedEnvelope = false;
+    let recapPage = 0, letterPage = 0, soundEnabled = true, currentTrack = '';
+    let toastTimer, transitTimer, finaleTimer, videoAvailable = false;
+
+    for(let i=1;i<=8;i++){
+      const line=document.createElement('i');
+      if(i===1) line.classList.add('now');
+      $('#miniProgress').appendChild(line);
+    }
+    function showToast(message, duration=2900){
+      clearTimeout(toastTimer);
+      const t=$('#toast'); t.textContent=message;t.classList.add('visible');
+      toastTimer=setTimeout(()=>t.classList.remove('visible'),duration);
+    }
+    function updateShell(stage){
+      const dark=[2,5,7,8].includes(stage);
+      document.body.classList.toggle('theme-dark',dark);
+      document.body.classList.toggle('theme-light',!dark);
+      $('#chapterCount').textContent=String(stage).padStart(2,'0')+' / 08';
+      $('#backBtn').hidden=stage===1;
+      $('#footerNote').textContent=stage===8?'Always yours, Bon ♡':'Made with love, by Bon';
+      $('#miniProgress').querySelectorAll('i').forEach((el,i)=>{el.classList.toggle('past',i+1<stage);el.classList.toggle('now',i+1===stage)});
+    }
+    function musicForStage(stage){return [2,3,4].includes(stage)?CONFIG.audio.quiz:stage===5?CONFIG.audio.recap:stage===6?CONFIG.audio.letter:stage===8?CONFIG.audio.finale:''}
+    async function setMusic(src,announce=false){
+      if(!src || !soundEnabled){music.pause();currentTrack=src||'';return}
+      if(currentTrack!==src){
+        music.pause();music.src=src;music.load();currentTrack=src;
+      }
+      // Nhạc quiz nhỏ hơn tiếng mèo; piano thư nhẹ nhàng; recap/finale giữ nguyên.
+      music.volume=[2,3,4].includes(current)?0.73:current===6?0.43:0.62;
+      try{await music.play()}catch(err){
+        if(announce && err.name!=='NotAllowedError') showToast('Chưa có file nhạc. Hãy thêm file vào assets/audio/ để nghe nhé.');
+      }
+    }
+    function syncAudio(stage,announce=false){
+      const target=musicForStage(stage);
+      if(!target){music.pause();currentTrack='';return}
+      // Cố gắng tự phát nhạc khi vào màn mới (kể cả màn hoa nở).
+      // Một số trình duyệt có thể chặn autoplay sau khi video kết thúc.
+      setMusic(target,announce);
+    }
+    music.addEventListener('error',()=>{
+      if([2,3,4,5,6,8].includes(current)) showToast('Chưa tìm thấy file nhạc cho phần này. Kiểm tra thư mục assets/audio/ nhé.',3600);
+    });
+    let youtubePlayer = null;
+    function goto(stage,{force=false}={}){
+      if(stage<1||stage>8||(!force && stage>furthest+1))return;
+      if(stage===3 && !quiz1Passed)return;
+      if(stage===5 && !quiz2Passed)return;
+      clearTimeout(transitTimer);clearTimeout(finaleTimer);
+      if(current===7 && stage!==7 && youtubePlayer && typeof youtubePlayer.pauseVideo==='function')youtubePlayer.pauseVideo();
+      if(stage!==8)$('#screen-8').classList.remove('blooming');
+      screens.forEach((el,i)=>{const active=(i+1===stage);el.classList.toggle('active',active);el.setAttribute('aria-hidden',String(!active))});
+      current=stage;furthest=Math.max(furthest,stage);updateShell(stage);
+      if(stage===5) renderRecap();
+      if(stage===6) renderLetter();
+      if(stage===8){
+        $('#screen-8').classList.remove('blooming');
+        void $('#screen-8').offsetWidth;
+        transitTimer=setTimeout(()=>$('#screen-8').classList.add('blooming'),250);
+      }
+      syncAudio(stage,false);
+    }
+    $('#startBtn').addEventListener('click',()=>goto(2));
+    $('#backBtn').addEventListener('click',()=>goto(current-1));
+    $('#soundToggle').addEventListener('click',()=>{
+      soundEnabled=!soundEnabled;
+      $('#soundToggle').setAttribute('aria-label',soundEnabled?'Tắt âm thanh':'Bật âm thanh');
+      $('#soundIcon').innerHTML=soundEnabled?'<path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>':'<path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M16 9l6 6m0-6-6 6"/>';
+      if(!soundEnabled)music.pause();else syncAudio(current,true);
+      showToast(soundEnabled?'Đã bật âm thanh ♫':'Đã tắt âm thanh ♡',1500);
+    });
+    let catDuckTimer;
+    function catSound(kind){
+  if(!soundEnabled) return;
+
+  const a = kind === 'right' ? $('#catCorrect') : $('#catWrong');
+
+  try {
+    a.pause();
+    a.currentTime = 0;
+    a.volume = 0.3; 
+    a.play().catch(() => {});
+  } catch(_e) {}
+}
+    function shakeInput(input){input.classList.remove('shake');void input.offsetWidth;input.classList.add('shake')}
+    function goodAnswer({input,feedback,button,submitId,message,next}){
+      input.disabled=true;button.disabled=true;feedback.textContent=message;feedback.classList.add('good');catSound('right');
+      $('#quiz1Sparkle').classList.add('show');
+      transitTimer=setTimeout(next,1550);
+    }
+    $('#quiz1Form').addEventListener('submit',(e)=>{
+      e.preventDefault();if(quiz1Passed)return;
+      const value=$('#quiz1Input').value.trim().normalize('NFC').toLocaleLowerCase('vi');
+      const correct=CONFIG.quiz1.answer.toLocaleLowerCase('vi');
+      const fb=$('#quiz1Feedback');
+      if(value===correct){
+        quiz1Passed=true;
+        goodAnswer({input:$('#quiz1Input'),feedback:fb,button:$('#quiz1Submit'),message:CONFIG.quiz1.correctMessage,next:()=>goto(3)});
+      }else{
+        fb.textContent=CONFIG.quiz1.wrongMessages[quiz1Wrong%CONFIG.quiz1.wrongMessages.length];
+        fb.classList.remove('good');quiz1Wrong++;catSound('wrong');shakeInput($('#quiz1Input'));
+        if(!value)fb.textContent='Mèo đang chờ câu trả lời của em đó ♡';
+      }
+    });
+    function openEnvelope(){
+      if(openedEnvelope)return;
+      openedEnvelope=true;$('#envelopeZone').classList.add('open');
+      $('#inviteHint').textContent='Đây là lời mời dành riêng cho em...';
+      $('#inviteReveal').classList.add('visible');
+      setTimeout(()=>$('#screen-3').classList.add('invitation-open'),850);
+      $('#envelopeZone').setAttribute('aria-label','Phong thư đã mở');
+    }
+    $('#inviteTitle').textContent=CONFIG.invitation.title;
+    $('#inviteBody').textContent=CONFIG.invitation.body;
+    $('#envelopeZone').addEventListener('click',openEnvelope);
+    $('#envelopeZone').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openEnvelope()}});
+    $('#invitationNext').addEventListener('click',()=>goto(4));
+    function parseDate(input){
+      const m=String(input).trim().match(/^(\d{1,2})\s*[\/.-]\s*(\d{1,2})\s*[\/.-]\s*(\d{4})$/);
+      if(!m)return null;
+      const d=Number(m[1]),mon=Number(m[2]),year=Number(m[3]);
+      const v=new Date(year,mon-1,d);
+      if(v.getFullYear()!==year||v.getMonth()!==mon-1||v.getDate()!==d)return null;
+      return `${d}/${mon}/${year}`;
+    }
+    $('#quiz2Form').addEventListener('submit',(e)=>{
+      e.preventDefault();if(quiz2Passed)return;
+      const val=parseDate($('#quiz2Input').value),target=parseDate(CONFIG.quiz2.answer);
+      const fb=$('#quiz2Feedback');
+      if(val&&val===target){
+        quiz2Passed=true;
+        goodAnswer({input:$('#quiz2Input'),feedback:fb,button:$('#quiz2Submit'),message:CONFIG.quiz2.correctMessage,next:()=>goto(5)});
+      }else{
+        fb.classList.remove('good');
+        fb.textContent=val?CONFIG.quiz2.wrongMessages[quiz2Wrong%CONFIG.quiz2.wrongMessages.length]:'Nhập ngày theo mẫu dd/m/yyyy nhé ♡';
+        quiz2Wrong++;catSound('wrong');shakeInput($('#quiz2Input'));
+      }
+    });
+    const slides=CONFIG.recap.slides;
+    const shades=[
+      'linear-gradient(125deg,#251320,#79525a 49%,#cfad96)',
+      'linear-gradient(135deg,#211825,#67505f 47%,#b8927c)',
+      'linear-gradient(120deg,#261521,#76434d 50%,#9f817d)',
+      'linear-gradient(120deg,#22101c,#6d4c53 47%,#ad9186)',
+      'linear-gradient(120deg,#26121c,#76505c 50%,#ba8e76)',
+      'linear-gradient(135deg,#281322,#85515b 55%,#d4ad89)'
+    ];
+    let photoRequest=0;
+    function renderRecap(){
+      if(!slides.length)return;
+      recapPage=Math.max(0,Math.min(recapPage,slides.length-1));
+      const s=slides[recapPage];
+      $('#recapIndex').textContent=`${String(recapPage+1).padStart(2,'0')} — ${String(slides.length).padStart(2,'0')}`;
+      $('#recapTitle').innerHTML='';
+      $('#recapTitle').appendChild(document.createTextNode(s.title));
+      $('#recapTitle').appendChild(document.createElement('br'));
+      const em=document.createElement('em');em.textContent=s.italic;$('#recapTitle').appendChild(em);
+      $('#recapDescription').textContent=s.description;
+      $('#photoPlaceholder').textContent=s.placeholder||'OUR STORY';
+      $('#photoPlaceholder').style.opacity='1';
+      const recapPhoto=$('#recapPhoto');
+      recapPhoto.style.background=shades[recapPage%shades.length];
+      recapPhoto.style.setProperty('--recap-bg','none');
+      const img=$('#recapImg');const req=++photoRequest;img.classList.remove('ready');img.removeAttribute('src');
+      if(s.image){
+        const temp=new Image();
+        temp.onload=()=>{if(req===photoRequest){
+          img.src=s.image;
+          recapPhoto.style.setProperty('--recap-bg','url('+JSON.stringify(s.image)+')');
+          $('#photoPlaceholder').style.opacity='0';
+          img.classList.add('ready');
+        }};
+        temp.onerror=()=>{};temp.src=s.image;
+      }
+      $('#recapIndicators').innerHTML='';
+      slides.forEach((_,i)=>{const marker=document.createElement('span');if(i===recapPage)marker.classList.add('current');$('#recapIndicators').appendChild(marker)});
+      $('#recapPrev').disabled=recapPage===0;
+      $('#recapNext').classList.toggle('hidden',recapPage===slides.length-1);
+      $('#recapFinish').classList.toggle('hidden',recapPage!==slides.length-1);
+    }
+    $('#recapPrev').addEventListener('click',()=>{recapPage--;renderRecap()});
+    $('#recapNext').addEventListener('click',()=>{recapPage++;renderRecap()});
+    $('#recapFinish').addEventListener('click',()=>goto(6));
+    function renderLetter(){
+      const p=CONFIG.letter.pages;
+      letterPage=Math.max(0,Math.min(letterPage,p.length-1));
+      $('#letterHead').textContent=CONFIG.letter.greeting;
+      $('#letterText').textContent=p[letterPage]||'';
+      $('#letterSign').textContent=CONFIG.letter.signature;
+      $('#letterPageCount').textContent=`${String(letterPage+1).padStart(2,'0')} / ${String(p.length).padStart(2,'0')}`;
+      $('#letterPrev').disabled=letterPage===0;
+      $('#letterNext').classList.toggle('hidden',letterPage===p.length-1);
+      $('#letterFinish').classList.toggle('hidden',letterPage!==p.length-1);
+    }
+    $('#letterPrev').addEventListener('click',()=>{letterPage--;renderLetter()});
+    $('#letterNext').addEventListener('click',()=>{letterPage++;renderLetter()});
+    $('#letterFinish').addEventListener('click',()=>goto(7));
+    // YouTube IFrame API: keep the video inside this screen and detect its ending.
+    function videoUnavailable(message){
+      videoAvailable=false;
+      $('#previewFinale').classList.remove('hidden');
+      $('#videoHelp').textContent=message;
+    }
+    window.onYouTubeIframeAPIReady=()=>{
+      if(!window.YT || !YT.Player){videoUnavailable('Không thể kết nối YouTube. Hãy kiểm tra Internet.');return}
+      youtubePlayer=new YT.Player('messageVideo',{
+        width:'100%',height:'100%',videoId:CONFIG.video,
+        playerVars:{playsinline:1,controls:1,rel:0},
+        events:{
+          onReady:()=>{
+            videoAvailable=true;
+            $('#previewFinale').classList.add('hidden');
+            $('#videoHelp').textContent='Bật video lên nhé, em yêu ♡';
+          },
+          onStateChange:(event)=>{
+            if(event.data===YT.PlayerState.ENDED && current===7)goto(8);
+          },
+          onError:()=>videoUnavailable('Video chưa phát được ở đây. Hãy kiểm tra quyền nhúng trên YouTube.')
+        }
+      });
+    };
+    if(CONFIG.video){
+      const youtubeAPI=document.createElement('script');
+      youtubeAPI.src='https://www.youtube.com/iframe_api';
+      youtubeAPI.onerror=()=>videoUnavailable('Không tải được YouTube. Hãy kiểm tra kết nối Internet.');
+      document.head.appendChild(youtubeAPI);
+    }else{videoUnavailable('Chưa thêm video. Có thể xem thử đoạn kết ở nút bên dưới.')}
+    $('#videoPlay').addEventListener('click',()=>{
+      if(!videoAvailable || !youtubePlayer){showToast('YouTube chưa tải xong. Em thử đợi một chút nhé ♡',3500);return}
+      music.pause();$('#messageVideo').classList.add('is-ready');$('#videoCover').classList.add('hidden');
+      try{youtubePlayer.playVideo()}catch(_e){showToast('Chạm nút Play trên video để bắt đầu nhé ♡')}
+    });
+    $('#previewFinale').addEventListener('click',()=>{if(youtubePlayer)youtubePlayer.pauseVideo();goto(8)});
+    // Rose: layered petals bloom outward in rings after video completes.
+    const roseRoot=$('#rosePetals');
+    function makePetal(angle,layer,i){
+      const ns='http://www.w3.org/2000/svg';
+      const g=document.createElementNS(ns,'g');g.setAttribute('transform',`rotate(${angle} 250 232)`);
+      const petal=document.createElementNS(ns,'path');petal.classList.add('petal');
+      if(layer===0){petal.setAttribute('d','M250 249 C188 215 185 152 215 131 C251 101 297 150 288 185 C284 211 260 243 250 249Z');petal.setAttribute('fill','url(#petalOuter)')}
+      else if(layer===1){petal.setAttribute('d','M249 244 C214 220 203 177 226 159 C255 137 286 174 279 202 C271 229 253 242 249 244Z');petal.setAttribute('fill','url(#petalInner)')}
+      else{petal.setAttribute('d','M249 237 C224 225 221 194 237 182 C258 169 276 196 265 217 C258 230 252 236 249 237Z');petal.setAttribute('fill','url(#petalInner)')}
+      petal.style.animationDelay=(layer===0?.45+i*.14:layer===1?1.25+i*.15:1.95+i*.12)+'s';
+      g.appendChild(petal);roseRoot.appendChild(g);
+    }
+    for(let i=0;i<9;i++)makePetal(i*40,0,i);
+    for(let i=0;i<7;i++)makePetal(i*(360/7)+15,1,i);
+    for(let i=0;i<5;i++)makePetal(i*72+20,2,i);
+    $('#replayBtn').addEventListener('click',()=>{
+      if(youtubePlayer && typeof youtubePlayer.stopVideo==='function')youtubePlayer.stopVideo();
+      $('#messageVideo').classList.remove('is-ready');$('#videoCover').classList.remove('hidden');
+      // Reset all locks, form values and envelope to allow an actual replay.
+      quiz1Passed=false;quiz2Passed=false;quiz1Wrong=0;quiz2Wrong=0;
+      furthest=1;recapPage=0;letterPage=0;openedEnvelope=false;
+      for (const id of ['quiz1Input','quiz2Input']){$('#'+id).disabled=false;$('#'+id).value=''}
+      for (const id of ['quiz1Submit','quiz2Submit'])$('#'+id).disabled=false;
+      for (const id of ['quiz1Feedback','quiz2Feedback']){$('#'+id).textContent='';$('#'+id).classList.remove('good')}
+      $('#quiz1Sparkle').classList.remove('show');
+      $('#envelopeZone').classList.remove('open');$('#screen-3').classList.remove('invitation-open');
+      $('#inviteReveal').classList.remove('visible');
+      $('#inviteHint').textContent='Chạm vào phong thư để mở một điều bí mật ♡';
+      goto(1,{force:true});
+    });
+    // Arrow controls work only for already-unlocked inner carousel/page navigation.
+    document.addEventListener('keydown',(e)=>{
+      const target=document.activeElement;
+      if(target && (target.tagName==='INPUT' || target.tagName==='VIDEO'))return;
+      if(current===5){if(e.key==='ArrowRight'&&recapPage<slides.length-1){recapPage++;renderRecap()}if(e.key==='ArrowLeft'&&recapPage>0){recapPage--;renderRecap()}}
+      if(current===6){if(e.key==='ArrowRight'&&letterPage<CONFIG.letter.pages.length-1){letterPage++;renderLetter()}if(e.key==='ArrowLeft'&&letterPage>0){letterPage--;renderLetter()}}
+    });
+    updateShell(1);
+  </script>
+</body>
+</html>
